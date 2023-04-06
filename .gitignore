@@ -3,4 +3,5 @@
 .ipynb_checkpoints/
 
 checkpoint.pth
-util/__pycache__/data_processing.cpython-39.pyc
+util/__pycache__/
+models/__pycache__/

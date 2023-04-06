@@ -6,6 +6,16 @@ import nltk
 import re
 import contractions
 
+
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
+
+
+
+MAX_NB_WORDS = 50000
+MAX_SEQUENCE_LENGTH = 250
+EMBEDDING_DIM = 100
+
 def fetch_data():
     data_file_path = './dataset'
     data_file_list = os.listdir(data_file_path)
@@ -41,3 +51,15 @@ def preprocess_data(df):
     df = df.dropna()
 
     return df
+
+
+def text_label_gen(df):
+    tokenizer = Tokenizer(num_words=MAX_NB_WORDS, filters='!"#$%&()*+,-./:;<=>?@[\]^_`{|}~', lower=True)
+    tokenizer.fit_on_texts(df['text'].values)
+
+    X = tokenizer.texts_to_sequences(df['text'].values)
+    X = pad_sequences(X, maxlen=MAX_SEQUENCE_LENGTH)
+
+    y = pd.get_dummies(df['is_backchannel']).values
+
+    return X,y
